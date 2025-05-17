@@ -78,12 +78,12 @@ export function SlideSupportView() {
       <div className="flex flex-col items-center justify-center p-50 h-full rounded-lg text-center">
         
         <h2 className="text-2xl font-semibold mb-2">
-          Come back when you've received more emails!
+          Come back when you&apos;ve received more emails!
         </h2>
 
         <p className="mb-4">
-          It looks like you haven't received any emails yet. When new emails
-          arrive, they'll appear here.
+          It looks like you haven&apos;t received any emails yet. When new emails
+          arrive, they&apos;ll appear here.
         </p>
       </div>
     );

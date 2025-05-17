@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(500).json({ error: 'No content returned from OpenAI.' });
     }
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('OpenAI API error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
