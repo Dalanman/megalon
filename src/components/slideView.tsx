@@ -63,7 +63,10 @@ export function SlideSupportView() {
     setCurrentIndex((prev) => prev + 1);
   };
 
+  
   const currentEmail = emails[currentIndex];
+
+  //match currentresponse email id to currentemail id
   const currentResponse = generatedResponse[currentIndex];
 
   if (!currentEmail) {
@@ -84,7 +87,7 @@ export function SlideSupportView() {
           suggestedResponse: currentEmail.suggestedResponse || "",
           generated: displaySuggested,
           displayresponse: displayResponse,
-          generatedresponse: currentResponse
+          generatedresponse: currentResponse || "",
         }}
         onAccept={handleAccept}
         onReject={handleReject}

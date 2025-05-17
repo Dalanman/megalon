@@ -56,31 +56,38 @@ export const SlideCard: React.FC<SlideCardProps> = ({
             </div>
           )}
         </div>
-
+          
+          //show both generating summary and response
         {
-        summary.generated && (
-          <div>
-            <p className="text-sm text-foreground">
-              {summary.suggestedResponse}
-            </p>
-          </div>
-        )|| !summary.generated && !summary.displayresponse &&(        
+        !summary.generated && !summary.displayresponse && (        
         <div className="flex items-center gap-2">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-black border-t-transparent"></div>
         <span><h1>Generating Summaries and Responses...</h1></span>
-        </div>) || summary.generated && !summary.displayresponse &&(        <div className="flex items-center gap-2">
+        </div>)
+
+
+        //display summary text and responses loading
+        || summary.generated && !summary.displayresponse && (        
+        <div className="flex items-center gap-2">
+            <p className="text-sm text-foreground">
+              {summary.suggestedResponse}
+            </p>
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-black border-t-transparent"></div>
-        <span><h1>Generating Responses...</h1></span>
+        <span><h1>Loading Responses...</h1></span>
         </div>) 
-        }
-        {
-        summary.displayresponse && (
+        
+        ||
+        
+        //display summary text and reponses text
+        summary.generated && summary.displayresponse &&(
           <div>
             <p className="text-sm text-foreground">
-              {summary.generatedresponse}
-            </p>
+              {summary.suggestedResponse}
+              {JSON.stringify(summary.generatedresponse)}
+            </p>  
           </div>
-        )}
+        )
+        }
       </CardContent>
 
       <CardFooter className="flex justify-end space-x-2">
@@ -90,7 +97,7 @@ export const SlideCard: React.FC<SlideCardProps> = ({
         {summary.generated && <Button variant="default" onClick={onAccept}>
           Accept
         </Button>}
-          </CardFooter>
+     </CardFooter>
     </Card>
   );
 };
