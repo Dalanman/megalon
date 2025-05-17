@@ -16,17 +16,18 @@ interface SlideCardProps {
     summary: string[];
     urgency: string;
     suggestedResponse?: string;
+    generated: boolean;
   };
   onAccept: () => void;
   onReject: () => void;
 }
-
 export const SlideCard: React.FC<SlideCardProps> = ({
   email,
   summary,
   onAccept,
   onReject,
 }) => {
+  summary.suggestedResponse
   return (
     <Card className="w-full max-w-2xl shadow-lg border border-muted">
       <CardHeader>
@@ -54,14 +55,18 @@ export const SlideCard: React.FC<SlideCardProps> = ({
           )}
         </div>
 
-        {summary.suggestedResponse && (
+        {
+        summary.generated && (
           <div>
-            <h4 className="text-md font-medium mb-1">Suggested Response</h4>
             <p className="text-sm text-foreground">
               {summary.suggestedResponse}
             </p>
           </div>
-        )}
+        ) || !summary.generated && (        
+        <div className="flex items-center gap-2">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+        <span>Generating Summary...</span>
+        </div>)}
       </CardContent>
 
       <CardFooter className="flex justify-end space-x-2">

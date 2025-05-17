@@ -6,7 +6,7 @@ import { SlideCard } from "./slideCard";
 export function SlideSupportView() {
   const [emails, setEmails] = useState(emailMock);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+ const [displaySuggested, setSuggested] = useState(false)
   useEffect(() => {
     const fetchEmails = async () => {
       const response = await fetch("/api/chat/summarize", {
@@ -15,16 +15,18 @@ export function SlideSupportView() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ prompt: emails }),
-      });
+      }).then(async response => {
+        setSuggested(true)
 
-      if (!response.ok) {
+        if (!response.ok) {
         console.error("Failed to fetch:", response.status);
         return;
       }
-
       const data = await response.json();
       console.log(data.response);
-      setEmails(data.response); // <- use .response from backend
+      setEmails(data.response); 
+      }
+      );// <- use .response from backend
     };
 
     fetchEmails();
@@ -59,6 +61,7 @@ export function SlideSupportView() {
           summary: currentEmail.summary,
           urgency: currentEmail.urgency,
           suggestedResponse: currentEmail.suggestedResponse || "",
+          generated: displaySuggested
         }}
         onAccept={handleAccept}
         onReject={handleReject}
