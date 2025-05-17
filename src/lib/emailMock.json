@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Jordan Lee",
+    "email": "jordan.lee08@outlook.com",
+    "subject": "Auto-Pay Not Working? Late Fees Keep Appearing",
+    "date": "2025-05-15T10:12:00Z",
+    "body": "Hi, I've had auto-pay enabled for months, but I was still charged late fees for March and April. I haven't changed any settings recently and never got a notification that the payments failed. Can you please investigate? I'd also like the fees removed as they weren't my fault. Thanks!"
+  },
+  {
+    "name": "Samantha Cruz",
+    "email": "samantha.cruz@gmail.com",
+    "subject": "Order Arrived Damaged – Need Replacement",
+    "date": "2025-05-14T18:47:00Z",
+    "body": "Hello, I received my recent order (Order #123456) today, but one of the items was completely damaged. The packaging looked fine on the outside, so I’m not sure what happened. Can I get a replacement sent out?"
+  },
+  {
+    "name": "Mark Thompson",
+    "email": "mark.t89@yahoo.com",
+    "subject": "Unable to Reset Password",
+    "date": "2025-05-14T09:20:00Z",
+    "body": "Good morning. I've tried resetting my password using your site, but I never receive the reset email. I’ve checked my spam folder. Can you assist me with this?"
+  },
+  {
+    "name": "Alicia Patel",
+    "email": "alicia.patel@companymail.com",
+    "subject": "Billing Discrepancy in April Invoice",
+    "date": "2025-05-13T15:05:00Z",
+    "body": "Hi, I noticed that my April invoice includes charges I don't recognize. Could someone explain the additional fees? I believe I only used basic plan features."
+  },
+  {
+    "name": "Ben Armstrong",
+    "email": "ben.armstrong@live.com",
+    "subject": "Feature Request: Dark Mode",
+    "date": "2025-05-12T11:33:00Z",
+    "body": "Hi team! Love the app – just wondering if there's any chance you could add dark mode in a future update? It would be great for using it at night. Thanks!"
+  },
+  {
+    "name": "Tina Nguyen",
+    "email": "tina.nguyen@mailbox.org",
+    "subject": "Account Locked After Login Attempt",
+    "date": "2025-05-11T21:18:00Z",
+    "body": "Hello, I entered my password wrong a few times and now my account is locked. Can you unlock it or let me know what steps to take?"
+  },
+  {
+    "name": "Carlos Ramirez",
+    "email": "c.ramirez@yahoo.com",
+    "subject": "Subscription Cancelled Without My Consent",
+    "date": "2025-05-10T13:42:00Z",
+    "body": "Hi, I just got an email saying my subscription was cancelled, but I never did that. Can you please look into this and reactivate it?"
+  }
+]
