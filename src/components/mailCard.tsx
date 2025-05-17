@@ -5,14 +5,24 @@ export function MailCard({ email }: { email: any }) {
   const date = new Date(email.date).toLocaleString()
 
   return (
-    <Card className="mb-4">
-      <CardHeader>
-        <CardTitle>{email.subject}</CardTitle>
+    <Card className="mb-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-2xl font-bold text-gray-900">
+          {email.subject}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <p><strong>From:</strong> {email.name} ({email.email})</p>
-        <p><strong>Date:</strong> {date}</p>
-        <p className="mt-2 text-gray-700">{email.body}</p>
+      <CardContent className="text-sm text-gray-800 space-y-2">
+        <div>
+          <span className="font-medium text-gray-600">From: </span>
+          {email.name}{" "}
+          <span className="text-gray-500 font-mono text-xs">({email.email})</span>
+        </div>
+        <div>
+          <span className="font-medium text-gray-600">Date: </span>
+          <span className="text-gray-500">{date}</span>
+        </div>
+        <hr className="my-2 border-gray-200" />
+        <p className="text-gray-700 leading-relaxed whitespace-pre-line">{email.body}</p>
       </CardContent>
     </Card>
   )

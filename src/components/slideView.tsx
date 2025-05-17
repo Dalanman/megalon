@@ -1,37 +1,45 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { SlideCard } from "@/components/slideCard"; // path may vary
-
-interface EmailData {
-  id: string;
-  from: string;
-  subject: string;
-  snippet: string;
-  summary: string;
-  suggestedResponse: string;
-}
-
-export default function SlideSupportView() {
-  const [emails, setEmails] = useState<EmailData[]>([]);
+import { useEffect, useState } from "react";
+import emailMock from "@/lib/emailMock.json";
+import { SlideCard } from "./slideCard";
+export function SlideSupportView() {
+  const [emails, setEmails] = useState(emailMock);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+ const [displaySuggested, setSuggested] = useState(false)
   useEffect(() => {
     const fetchEmails = async () => {
-      const response = await fetch('/api/emails'); // Replace with actual OpenAI-backed endpoint
+      const response = await fetch("/api/chat/summarize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: emails }),
+      }).then(async response => {
+        setSuggested(true)
+
+        if (!response.ok) {
+        console.error("Failed to fetch:", response.status);
+        return;
+      }
       const data = await response.json();
-      setEmails(data);
+      console.log(data.response);
+      setEmails(data.response); 
+      }
+      );// <- use .response from backend
     };
+
     fetchEmails();
-  }, []);
+  }, []); // <-- runs only once on mount
+
 
   const handleAccept = () => {
-    console.log('Accepted:', emails[currentIndex].id);
+    console.log("Accepted:", emails[currentIndex].id);
     setCurrentIndex((prev) => prev + 1);
   };
 
   const handleReject = () => {
-    console.log('Rejected:', emails[currentIndex].id);
+    console.log("Rejected:", emails[currentIndex].id);
     setCurrentIndex((prev) => prev + 1);
   };
 
@@ -45,14 +53,15 @@ export default function SlideSupportView() {
     <div className="flex justify-center items-center min-h-screen bg-background p-4">
       <SlideCard
         email={{
-          id: currentEmail.id,
-          from: currentEmail.from,
+          email_id: currentEmail.id,
+          from: currentEmail.name,
           subject: currentEmail.subject,
-          snippet: currentEmail.snippet,
         }}
         summary={{
           summary: currentEmail.summary,
-          suggestedResponse: currentEmail.suggestedResponse,
+          urgency: currentEmail.urgency,
+          suggestedResponse: currentEmail.suggestedResponse || "",
+          generated: displaySuggested
         }}
         onAccept={handleAccept}
         onReject={handleReject}
