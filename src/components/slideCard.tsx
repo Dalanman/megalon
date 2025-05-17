@@ -18,6 +18,8 @@ interface SlideCardProps {
     urgency: string;
     suggestedResponse?: string;
     generated: boolean;
+    displayresponse: boolean,
+    generatedresponse?: string[],
   };
   onAccept: () => void;
   onReject: () => void;
@@ -89,82 +91,98 @@ export const SlideCard: React.FC<SlideCardProps> = ({
                     {summary.summary.map((point, idx) => (
                       <li key={idx}>{point}</li>
                     ))}
-                  </ul>
-                </div>
-              )}
+</ul>
+</div>
+)}
+</div>
+
+{/* Summary and response loading/display logic */}
+{!summary.generated && !summary.displayresponse ? (
+  <div className="flex flex-col items-center justify-center py-8">
+    <div className="h-12 w-12 animate-spin rounded-full border-2 border-primary border-t-transparent mb-4"></div>
+    <h3 className="text-lg font-medium">Generating Summaries and Responses...</h3>
+  </div>
+) : summary.generated && !summary.displayresponse ? (
+  <div className="flex items-center gap-2">
+    <p className="text-sm text-foreground">{summary.suggestedResponse}</p>
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-black border-t-transparent"></div>
+    <span><h1>Loading Responses...</h1></span>
+  </div>
+) : (
+  summary.generated && summary.displayresponse && (
+    <div>
+      <p className="text-sm text-foreground">{summary.suggestedResponse}</p>
+      <div className="mt-2 space-y-2 text-sm text-muted-foreground">
+        {summary.generatedresponse?.response_options?.map((option, index) => (
+          <div key={index}>
+            <strong>Option {String.fromCharCode(65 + index)}:</strong> {option.response}
           </div>
-
-          {summary.generated ? (
-            <div>
-              <p className="text-sm text-foreground">
-                {summary.suggestedResponse}
-              </p>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-8">
-              <div className="h-12 w-12 animate-spin rounded-full border-2 border-primary border-t-transparent mb-4"></div>
-              <h3 className="text-lg font-medium">Generating Summaries...</h3>
-            </div>
-          )}
-        </CardContent>
-
-        {summary.generated && (
-          <CardFooter className="flex justify-between">
-            <Button
-              onClick={handleReject}
-              disabled={!selectedOption}
-              className={`transition-colors ${
-                selectedOption
-                  ? "bg-white text-red-600 border border-red-600 hover:bg-red-50"
-                  : "bg-gray-200 text-gray-500 cursor-not-allowed"
-              }`}
-              variant="ghost"
-            >
-              Reject
-            </Button>
-            <Button
-              onClick={handleAccept}
-              disabled={!selectedOption}
-              className={`transition-colors ${
-                selectedOption
-                  ? "bg-white text-blue-600 border border-blue-600 hover:bg-blue-50"
-                  : "bg-gray-200 text-gray-500 cursor-not-allowed"
-              }`}
-              variant="ghost"
-            >
-              Accept
-            </Button>
-          </CardFooter>
-        )}
-      </Card>
-
-      {summary.generated && (
-        <div className="flex w-full max-w-2xl gap-4 mt-2">
-          <div
-            className={`flex-1 p-6 rounded-lg border bg-white cursor-pointer transition-all duration-300 flex flex-col items-center justify-center text-center ${
-              selectedOption === "A"
-                ? "bg-blue-100 border-blue-500 shadow-md"
-                : "hover:bg-gray-50 hover:border-gray-300"
-            }`}
-            onClick={() => handleOptionClick("A")}
-          >
-            <h3 className="font-medium text-lg mb-2">Option A</h3>
-            <p className="text-sm text-gray-600">Select this response option</p>
-          </div>
-
-          <div
-            className={`flex-1 p-6 rounded-lg border bg-white cursor-pointer transition-all duration-300 flex flex-col items-center justify-center text-center ${
-              selectedOption === "B"
-                ? "bg-green-100 border-green-500 shadow-md"
-                : "hover:bg-gray-50 hover:border-gray-300"
-            }`}
-            onClick={() => handleOptionClick("B")}
-          >
-            <h3 className="font-medium text-lg mb-2">Option B</h3>
-            <p className="text-sm text-gray-600">Select this response option</p>
-          </div>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
+  )
+)}
+</CardContent>
+
+{/* Accept/Reject buttons */}
+{summary.generated && (
+  <CardFooter className="flex justify-between">
+    <Button
+      onClick={handleReject}
+      disabled={!selectedOption}
+      className={`transition-colors ${
+        selectedOption
+          ? "bg-white text-red-600 border border-red-600 hover:bg-red-50"
+          : "bg-gray-200 text-gray-500 cursor-not-allowed"
+      }`}
+      variant="ghost"
+    >
+      Reject
+    </Button>
+    <Button
+      onClick={handleAccept}
+      disabled={!selectedOption}
+      className={`transition-colors ${
+        selectedOption
+          ? "bg-white text-blue-600 border border-blue-600 hover:bg-blue-50"
+          : "bg-gray-200 text-gray-500 cursor-not-allowed"
+      }`}
+      variant="ghost"
+    >
+      Accept
+    </Button>
+  </CardFooter>
+)}
+
+{/* Response option cards (A/B) */}
+{summary.generated && summary.displayresponse && (
+  <div className="flex w-full max-w-2xl gap-4 mt-2">
+    {summary.generatedresponse?.response_options?.map((option, index) => {
+      const optLetter = String.fromCharCode(65 + index); // A, B, etc.
+      const isSelected = selectedOption === optLetter;
+      const baseClasses =
+        "flex-1 p-6 rounded-lg border bg-white cursor-pointer transition-all duration-300 flex flex-col items-center justify-center text-center";
+
+      const activeStyles =
+        isSelected
+          ? index === 0
+            ? "bg-blue-100 border-blue-500 shadow-md"
+            : "bg-green-100 border-green-500 shadow-md"
+          : "hover:bg-gray-50 hover:border-gray-300";
+
+      return (
+        <div
+          key={index}
+          className={`${baseClasses} ${activeStyles}`}
+          onClick={() => handleOptionClick(optLetter)}
+        >
+          <h3 className="font-medium text-lg mb-2">Option {optLetter}</h3>
+          <p className="text-sm text-gray-600">{option.response}</p>
+        </div>
+      );
+    })}
+  </div>
+)}
+
   );
 };
