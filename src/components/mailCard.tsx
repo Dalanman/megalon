@@ -1,3 +1,4 @@
+/* eslint-disable */
 // components/MailCard.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 

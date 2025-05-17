@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { OpenAI } from 'openai';
 import { promises as fs } from 'fs';
-import { parse } from 'path';
 
 
 const openai = new OpenAI({
