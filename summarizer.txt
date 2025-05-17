@@ -32,11 +32,20 @@ Conflict Resolution:
 
 # Instructions
 
-* You will be given multiple emails, each enclosed in:
-  <email id="..."> ... </email>
+* You will be given multiple emails, each enclosed in a json format:
+
+{
+"id",
+"name",
+"email",
+"subject",
+"date",
+"body",
+}
 
 * Output ONLY the following, in this exact JSON format with no extra text:
 
+```json
 {
   "email_id": "{email_id}",
   "name": "{Name or null}",
@@ -49,24 +58,31 @@ Conflict Resolution:
     "{Key issue 2}",
     "..."
   ],
-  "urgency": "{boolean (true if urgent tone/timeline mentioned, else false}",
+  "urgency": "High/Medium/Low",
   "references": ["{links/attachments if any}", "..."]
 }
 
+After Summarizing, sort the emails in the JSON file in Descending Order From Highest Priority to Lowest priority. Do not sort by email_id in the returned JSON, ensure that it is sorted by priority.
+
+- Within each group, emails may be internally sorted based on manual rules if needed, but this will not affect output format.  
+
+
 # Examples
 
-<email id="example-1">
-Subject: Slow Internet Connection During Evening Hours
-From: maria.delacruz@example.com
-Date: N/A
-Body:
-Hi JNet Support,
+{
+"id": "1",
+"name" "Maria dela Cruz",
+"email": maria.delacruz@example.com",
+"subject": "Slow Internet Connection During Evening Hours",
+"date": "N/A",
+"body": "Hi JNet Support,
 I’ve been experiencing very slow internet every night between 8–10 PM. I ran speed tests (see attached screenshot) and it’s way below my 100 Mbps plan. Can someone look into this?
 
 Thanks,
 Maria Dela Cruz
-Account #12345678
-</email>
+Account #12345678",
+}
+
 {
   "email_id": "example-1",
   "name": "Maria Dela Cruz",
@@ -79,7 +95,9 @@ Account #12345678
     "Speed tests below 100 Mbps plan",
     "Issue ongoing for 2 weeks"
   ],
-  "urgency": true,
+  "urgency": High,
 }
+
+After Summarizing, sort the emails in the JSON file in Descending Order From Highest Priority to Lowest priority. Do not sort by email_id in the returned JSON, ensure that it is sorted by priority.
 
 Respond with pure JSON only, no explanation or comments. Each object should be on its own line, valid JSON only
