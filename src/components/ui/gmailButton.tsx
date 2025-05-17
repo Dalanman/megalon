@@ -4,18 +4,24 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
-
+import { createClient } from "@/utils/supabase/client";
 export function GmailButton() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
-  function handleLogin() {
-        setIsLoading(true);
-        // In a real app, we would authenticate with Gmail
+  async function handleLogin() {
+  const supabase = createClient()
+  const { data, error } = await supabase.auth.signInWithOAuth({
+  provider: 'google',
+  options: {
+    redirectTo: 'http:localhost:3000/auth/callback',
+    queryParams: {
+      access_type: 'offline',
+      prompt: 'consent',
+    }
+,
+  },
+})      // In a real app, we would authenticate with Gmail
         // For demo purposes, we'll just redirect to the dashboard
-        setTimeout(() => {
-            router.push("/dashboard");
-        }, 1500);
     }
 
   return (
