@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { prompt } = req.body;
 
   try {
-    const instructions = await fs.readFile("\src\app\lib\summarizer.txt", "utf-8");
+    const instructions = await fs.readFile(process.cwd() + "\src\app\lib\summarizer.txt", "utf-8");
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4.1-mini',
