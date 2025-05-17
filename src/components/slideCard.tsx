@@ -31,23 +31,23 @@ export const SlideCard: React.FC<SlideCardProps> = ({
   return (
     <Card className="w-full max-w-2xl shadow-lg border border-muted">
       <CardHeader>
-        <h3 className="text-xl font-semibold">{email.subject}</h3>
-        <p className="text-sm text-muted-foreground mt-1">
-          From: <span className="font-medium">{email.from}</span>
-        </p>
+        <h3 className="text-xl font-semibold">{summary.generated && email.subject}</h3>
+        {summary.generated && <p className="text-sm text-muted-foreground mt-1">
+          From: <span className="font-medium">{summary.generated && email.from}</span>
+        </p>}
       </CardHeader>
 
       <CardContent className="space-y-4">
         <div>
-          <p className="text-sm text-foreground">{summary.urgency}</p>
+          <p className="text-sm text-foreground">{summary.generated && summary.urgency}</p>
         </div>
 
         <div>
-          {Array.isArray(summary.summary) && summary.summary.length > 0 && (
+          {summary.generated && Array.isArray(summary.summary) && summary.summary.length > 0 && (
             <div>
               <h4 className="text-md font-medium mb-1">Summary</h4>
               <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-                {summary.summary.map((point, idx) => (
+                {summary.generated && summary.summary.map((point, idx) => (
                   <li key={idx}>{point}</li>
                 ))}
               </ul>
@@ -64,18 +64,18 @@ export const SlideCard: React.FC<SlideCardProps> = ({
           </div>
         ) || !summary.generated && (        
         <div className="flex items-center gap-2">
-        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-        <span>Generating Summary...</span>
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-black border-t-transparent"></div>
+        <span><h1>Generating Summaries...</h1></span>
         </div>)}
       </CardContent>
 
       <CardFooter className="flex justify-end space-x-2">
-        <Button variant="destructive" onClick={onReject}>
+        {summary.generated && <Button variant="destructive" onClick={onReject}>
           Reject
-        </Button>
-        <Button variant="default" onClick={onAccept}>
+        </Button>}
+        {summary.generated && <Button variant="default" onClick={onAccept}>
           Accept
-        </Button>
+        </Button>}
       </CardFooter>
     </Card>
   );
