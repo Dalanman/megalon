@@ -29,32 +29,54 @@ export const SlideCard: React.FC<SlideCardProps> = ({
   onAccept,
   onReject,
 }) => {
-  summary.suggestedResponse
+  summary.suggestedResponse;
   return (
     <Card className="w-full max-w-2xl shadow-lg border border-muted">
-      <CardHeader>
-        <h3 className="text-xl font-semibold">{summary.generated && email.subject}</h3>
-        {summary.generated && <p className="text-sm text-muted-foreground mt-1">
-          From: <span className="font-medium">{summary.generated && email.from}</span>
-        </p>}
+      <CardHeader className="flex flex-row items-start justify-between">
+        <div>
+          <h3 className="text-xl font-semibold">
+            {summary.generated && email.subject}
+          </h3>
+          {summary.generated && (
+            <p className="text-sm text-muted-foreground mt-1">
+              From: <span className="font-medium">{email.from}</span>
+            </p>
+          )}
+        </div>
+        {summary.generated && (
+          <div
+            className={`px-3 py-1 rounded-full text-medium font-medium ${
+              summary.urgency?.toLowerCase().includes("high")
+                ? "bg-red-100 text-red-800"
+                : summary.urgency?.toLowerCase().includes("medium")
+                ? "bg-orange-100 text-orange-800"
+                : "bg-yellow-100 text-yellow-800"
+            }`}
+          >
+            {summary.urgency}
+          </div>
+        )}
       </CardHeader>
 
       <CardContent className="space-y-4">
         <div>
-          <p className="text-sm text-foreground">{summary.generated && summary.urgency}</p>
+          <p className="text-sm text-foreground">{summary.generated}</p>
         </div>
 
         <div>
-          {summary.generated && Array.isArray(summary.summary) && summary.summary.length > 0 && (
-            <div>
-              <h4 className="text-md font-medium mb-1">Summary</h4>
-              <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-                {summary.generated && summary.summary.map((point, idx) => (
-                  <li key={idx}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {summary.generated &&
+            Array.isArray(summary.summary) &&
+            summary.summary.length > 0 && (
+              <div>
+                <h4 className="text-md font-medium mb-1">Summary</h4>
+                <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
+                  {summary.generated &&
+                    summary.summary.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                </ul>
+              </div>
+            )}
         </div>
           
           //show both generating summary and response
