@@ -25,6 +25,7 @@ export default function Home() {
         </div>
         <div className="flex justify-center p-4">
           <GmailButton />
+          
         </div>
       </Card>
     </div>
