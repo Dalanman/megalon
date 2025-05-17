@@ -9,10 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "chalk": "^5.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^16.5.0",
     "lucide-react": "^0.511.0",
     "next": "15.3.2",
+    "openai": "^4.100.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.3.0"
@@ -28,5 +31,10 @@
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.0",
     "typescript": "^5"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
