@@ -14,7 +14,7 @@ interface SlideCardProps {
   };
   summary: {
     summary: string[];
-    urgency: boolean;
+    urgency: string;
     suggestedResponse?: string;
     generated: boolean;
   };
@@ -39,7 +39,7 @@ export const SlideCard: React.FC<SlideCardProps> = ({
 
       <CardContent className="space-y-4">
         <div>
-          <p className="text-sm text-foreground">{email.snippet}</p>
+          <p className="text-sm text-foreground">{summary.urgency}</p>
         </div>
 
         <div>

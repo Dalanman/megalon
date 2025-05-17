@@ -29,15 +29,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const message = completion.choices[0]?.message?.content;
 
     if (message != null) {
-      const jsonObjects = message
-        .trim()
-        .split(/\n(?={)/g)
-        .map(str => str.trim())
-        .filter(str => str.length > 0);
+        const raw = message.trim();
 
-      const parsedObjects = jsonObjects.map(jsonStr => JSON.parse(jsonStr));
+        const cleaned = raw.replace(/^```json\s*/, '').replace(/```$/, '');
 
-      res.status(200).json({ response: parsedObjects });
+        const parsed = JSON.parse(cleaned);
+
+      res.status(200).json({ response: parsed });
     } else {
       res.status(500).json({ error: 'No content returned from OpenAI.' });
     }
