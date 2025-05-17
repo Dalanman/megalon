@@ -16,17 +16,20 @@ export function SlideSupportView() {
         },
         body: JSON.stringify({ prompt: emails }),
       });
+
       if (!response.ok) {
         console.error("Failed to fetch:", response.status);
         return;
       }
 
       const data = await response.json();
-      setEmails(data);
+      console.log(data.response);
+      setEmails(data.response); // <- use .response from backend
     };
 
     fetchEmails();
-  });
+  }, []); // <-- runs only once on mount
+
 
   const handleAccept = () => {
     console.log("Accepted:", emails[currentIndex].id);

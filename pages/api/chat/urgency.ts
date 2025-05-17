@@ -7,7 +7,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const instructions = await fs.readFile("urgencyCategorizer.txt", "utf-8");
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -17,6 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { prompt } = req.body;
   
   try {
+    const instructions = await fs.readFile("urgencyCategorizer.txt", "utf-8");
+
     const completion = await openai.chat.completions.create({
       model: 'gpt-4.1-mini',
       messages: [
