@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { GmailButton } from "@/components/ui/gmailButton";
+import { ModeToggle } from "@/components/ui/modeToggle";
 import { Mail } from "lucide-react";
 
 export default function Home() {
@@ -27,6 +28,9 @@ export default function Home() {
           <GmailButton />
         </div>
       </Card>
+      <div className="absolute bottom-0 right-0 m-5">
+        <ModeToggle></ModeToggle>
+      </div>
     </div>
   );
 }
