@@ -1,213 +1,200 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/hooks/use-toast";
-import {
-  ArrowDownAZ,
-  Filter,
-  LayoutDashboard,
-  Loader2,
-  RefreshCcw,
-  Search,
-  Tags,
-} from "lucide-react";
-import mockEmails from "@/lib/emailMock.json";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Checkbox } from "@/components/ui/checkbox"
+import { useToast } from "@/hooks/use-toast"
+import { LayoutDashboard, Loader2, RefreshCcw, Tags, Mail, Clock } from "lucide-react"
+import mockEmails from "@/lib/emailMock.json"
 
 export function MailboxView() {
-  const [emails, setEmails] = useState(mockEmails);
-  const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
-  const [isClassifying, setIsClassifying] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const router = useRouter();
-  const { toast } = useToast();
+  const [emails, setEmails] = useState(mockEmails)
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([])
+  const [isClassifying, setIsClassifying] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [hoveredRow, setHoveredRow] = useState<string | null>(null)
+  const router = useRouter()
+  const { toast } = useToast()
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedEmails(emails.map((email) => email.id));
+      setSelectedEmails(emails.map((email) => email.id))
     } else {
-      setSelectedEmails([]);
+      setSelectedEmails([])
     }
-  };
+  }
 
   const handleSelectEmail = (emailId: string, checked: boolean) => {
     if (checked) {
-      setSelectedEmails([...selectedEmails, emailId]);
+      setSelectedEmails([...selectedEmails, emailId])
     } else {
-      setSelectedEmails(selectedEmails.filter((id) => id !== emailId));
+      setSelectedEmails(selectedEmails.filter((id) => id !== emailId))
     }
-  };
-
-  const handleClassify = () => {
-    setIsClassifying(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsClassifying(false);
-      toast({
-        title: "Emails Classified",
-        description: `${
-          selectedEmails.length > 0 ? selectedEmails.length : "All"
-        } emails have been classified using your tags.`,
-      });
-    }, 2000);
-  };
+  }
 
   const handleSummarize = () => {
     // Navigate to the dashboard/swipe view
-    router.push("/slidesupport");
-  };
+    router.push("/slidesupport")
+  }
 
   const handleRefresh = () => {
-    setIsRefreshing(true);
+    setIsRefreshing(true)
 
-    // Simulate fetching new emails
-    setTimeout(() => {
-      setIsRefreshing(false);
-      toast({
-        title: "Mailbox Refreshed",
-        description: "Your emails have been updated.",
-      });
-    }, 1500);
-  };
+    
+  }
+
+  // Format date for better display
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString)
+      const now = new Date()
+
+      // If it's today, show time only
+      if (date.toDateString() === now.toDateString()) {
+        return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      }
+
+      // If it's this year, show month and day
+      if (date.getFullYear() === now.getFullYear()) {
+        return date.toLocaleDateString([], { month: "short", day: "numeric" })
+      }
+
+      // Otherwise show full date
+      return date.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })
+    } catch (e) {
+      return dateString // Fallback to original string if parsing fails
+    }
+  }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 w-full">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Mailbox</h1>
-          <p className="text-sm text-muted-foreground">
-            Showing top 50 emails from your Gmail account
-          </p>
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <Mail className="h-5 w-5 text-primary" />
+            <h1 className="text-2xl font-bold tracking-tight">Mailbox</h1>
+          </div>
+          <p className="text-sm text-muted-foreground">Showing top {emails.length} emails from your Gmail account</p>
         </div>
-        <div className="flex flex-col gap-2 sm:flex-row">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           <Button
             variant="outline"
-            className="gap-2"
+            size="sm"
+            className="h-9 gap-2 transition-all hover:bg-muted/80"
             onClick={handleRefresh}
             disabled={isRefreshing}
           >
-            {isRefreshing ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <RefreshCcw className="h-4 w-4" />
-            )}
-            Refresh
+            {isRefreshing ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCcw className="h-4 w-4" />}
+            <span>Refresh</span>
           </Button>
-          <Button
-            variant="outline"
-            className="gap-2"
-            onClick={handleClassify}
-            disabled={isClassifying}
-          >
-            {isClassifying ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Tags className="h-4 w-4" />
-            )}
-            Classify
-          </Button>
-          <Button className="gap-2" onClick={handleSummarize}>
+          <Button size="sm" className="h-9 gap-2 shadow-sm transition-all hover:shadow-md" onClick={handleSummarize}>
             <LayoutDashboard className="h-4 w-4" />
-            Summarize
+            <span>Summarize</span>
           </Button>
         </div>
       </div>
 
-      <Card>
+      <Card className="border-slate-200 shadow-sm transition-all hover:shadow-md">
         <CardHeader className="pb-3">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <CardTitle>Inbox</CardTitle>
-            <div className="relative w-full max-w-sm">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search emails..."
-                className="pl-8"
-              />
+            <div className="flex items-center gap-2">
+              <CardTitle>Inbox</CardTitle>
+              {selectedEmails.length > 0 && (
+                <Badge variant="secondary" className="ml-2 bg-primary/10 text-primary">
+                  {selectedEmails.length} selected
+                </Badge>
+              )}
             </div>
           </div>
-          <CardDescription>
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="outline" className="rounded-sm px-1 font-normal">
-                Unread: 12
-              </Badge>
-              <Badge variant="outline" className="rounded-sm px-1 font-normal">
-                Selected: {selectedEmails.length}
-              </Badge>
-            </div>
-          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border">
+          <div className="rounded-md border border-slate-200 bg-white shadow-sm">
             <Table>
               <TableHeader>
-                <TableRow>
+                <TableRow className="bg-slate-50 hover:bg-slate-50">
                   <TableHead className="w-12">
                     <Checkbox
                       onCheckedChange={(checked) => handleSelectAll(!!checked)}
                       aria-label="Select all"
+                      className="transition-all data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                     />
                   </TableHead>
-                  <TableHead className="w-12"></TableHead>
-                  <TableHead>Sender</TableHead>
-                  <TableHead>Subject</TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    Preview
-                  </TableHead>
-                  <TableHead className="w-24 text-right">Date</TableHead>
+                  <TableHead className="font-medium">Sender</TableHead>
+                  <TableHead className="font-medium">Subject</TableHead>
+                  <TableHead className="hidden font-medium md:table-cell">Preview</TableHead>
+                  <TableHead className="w-24 text-right font-medium">Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {emails.map((email) => (
-                  <TableRow key={email.id} className="font-medium">
-                    <TableCell>
+                  <TableRow
+                    key={email.id}
+                    className={`group transition-colors ${
+                      selectedEmails.includes(email.id) ? "bg-primary/5" : hoveredRow === email.id ? "bg-slate-50" : ""
+                    }`}
+                    onMouseEnter={() => setHoveredRow(email.id)}
+                    onMouseLeave={() => setHoveredRow(null)}
+                  >
+                    <TableCell className="py-3">
                       <Checkbox
                         checked={selectedEmails.includes(email.id)}
-                        onCheckedChange={(checked) =>
-                          handleSelectEmail(email.id, !!checked)
-                        }
+                        onCheckedChange={(checked) => handleSelectEmail(email.id, !!checked)}
                         aria-label={`Select email from ${email.name}`}
+                        className="transition-all data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                       />
                     </TableCell>
-                    <TableCell className="font-medium">{email.name}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {email.subject}
+                    <TableCell className="py-3 font-medium">
+                      <div className="truncate max-w-[150px]">{email.name}</div>
+                    </TableCell>
+                    <TableCell className="py-3">
+                      <div className="font-medium truncate max-w-[200px]">{email.subject}</div>
+                    </TableCell>
+                    <TableCell className="hidden max-w-xs py-3 text-muted-foreground md:table-cell">
+                      <div className="truncate">{email.body}</div>
+                    </TableCell>
+                    <TableCell className="py-3 text-right text-sm text-muted-foreground">
+                      <div className="flex items-center justify-end gap-1">
+                        <Clock className="h-3 w-3 opacity-70" />
+                        <span>{formatDate(email.date)}</span>
                       </div>
-                    </TableCell>
-                    <TableCell className="hidden max-w-xs truncate text-muted-foreground md:table-cell">
-                      {email.body}
-                    </TableCell>
-                    <TableCell className="text-right text-sm text-muted-foreground">
-                      {email.date}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </div>
+
+          {emails.length === 0 && (
+            <div className="flex h-40 items-center justify-center rounded-md border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+              <div className="space-y-2">
+                <Mail className="mx-auto h-8 w-8 text-slate-400" />
+                <p className="text-sm font-medium text-slate-600">No emails found</p>
+                <p className="text-xs text-slate-500">Refresh to check for new emails</p>
+              </div>
+            </div>
+          )}
+
+          {selectedEmails.length > 0 && (
+            <div className="mt-4 flex items-center justify-between rounded-md bg-primary/5 p-2 text-sm">
+              <span className="font-medium text-primary">
+                {selectedEmails.length} {selectedEmails.length === 1 ? "email" : "emails"} selected
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedEmails([])}
+                className="h-7 text-xs hover:bg-primary/10"
+              >
+                Clear selection
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

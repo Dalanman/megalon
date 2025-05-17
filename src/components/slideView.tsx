@@ -6,9 +6,14 @@ import { SlideCard } from "./slideCard";
 export function SlideSupportView() {
   const [emails, setEmails] = useState(emailMock);
   const [currentIndex, setCurrentIndex] = useState(0);
- const [displaySuggested, setSuggested] = useState(false)
- const [displayResponse, setResponse] = useState(false)
- const [generatedResponse, setgeneratedResponse] = useState([{"email_id":"string","response_options":[{"option":"string","response":"string"}]}])
+  const [displaySuggested, setSuggested] = useState(false);
+  const [displayResponse, setResponse] = useState(false);
+  const [generatedResponse, setgeneratedResponse] = useState([
+    {
+      email_id: "string",
+      response_options: [{ option: "string", response: "string" }],
+    },
+  ]);
   useEffect(() => {
     const fetchEmails = async () => {
       const response = await fetch("/api/chat/summarize", {
@@ -17,41 +22,41 @@ export function SlideSupportView() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ prompt: emails }),
-      }).then(async response => {
-        setSuggested(true)
-
-        if (!response.ok) {
-        console.error("Failed to fetch:", response.status);
-        return;
-      }
-      const data = await response.json();
-      console.log(data.response);
-      setEmails(data.response); 
-      }
-      ).then(async response => {
-        const response2 = await fetch("/api/chat/reply",{method: "POST",
-              headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: emails }),
-        }).then(async response => {
-        setResponse(true)
-
-        if (!response.ok) {
-        console.error("Failed to fetch:", response.status);
-        return;
-      }
-      const data = await response.json();
-      console.log(data.response);
-      setgeneratedResponse(data.response); 
       })
-      });// <- use .response from backend
+        .then(async (response) => {
+          setSuggested(true);
+
+          if (!response.ok) {
+            console.error("Failed to fetch:", response.status);
+            return;
+          }
+          const data = await response.json();
+          console.log(data.response);
+          setEmails(data.response);
+        })
+        .then(async (response) => {
+          const response2 = await fetch("/api/chat/reply", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt: emails }),
+          }).then(async (response) => {
+            setResponse(true);
+
+            if (!response.ok) {
+              console.error("Failed to fetch:", response.status);
+              return;
+            }
+            const data = await response.json();
+            console.log(data.response);
+            setgeneratedResponse(data.response);
+          });
+        }); // <- use .response from backend
     };
 
     fetchEmails();
-    
   }, []); // <-- runs only once on mount
-
 
   const handleAccept = () => {
     console.log("Accepted:", emails[currentIndex].id);
@@ -63,18 +68,29 @@ export function SlideSupportView() {
     setCurrentIndex((prev) => prev + 1);
   };
 
-  
   const currentEmail = emails[currentIndex];
 
   //match currentresponse email id to currentemail id
   const currentResponse = generatedResponse[currentIndex];
 
   if (!currentEmail) {
-    return <p className="text-center mt-20">🎉 You're all caught up!</p>;
+    return (
+      <div className="flex flex-col items-center justify-center p-50 h-full rounded-lg text-center">
+        
+        <h2 className="text-2xl font-semibold mb-2">
+          Come back when you've received more emails!
+        </h2>
+
+        <p className="mb-4">
+          It looks like you haven't received any emails yet. When new emails
+          arrive, they'll appear here.
+        </p>
+      </div>
+    );
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-background p-4">
+    <div className="flex justify-center items-center min-h-screen bg-background">
       <SlideCard
         email={{
           email_id: currentEmail.id,

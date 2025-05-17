@@ -153,8 +153,8 @@ export const SlideCard: React.FC<SlideCardProps> = ({
             const activeStyles =
               isSelected
                 ? index === 0
-                  ? "bg-blue-100 border-blue-500 shadow-md"
-                  : "bg-green-100 border-green-500 shadow-md"
+                  ? "bg-blue-100 border-blue-500 shadow-2xl"
+                  : "bg-green-100 border-green-500 shadow-2xl"
                 : "hover:bg-gray-50 hover:border-gray-300";
 
             return (
