@@ -12,6 +12,7 @@ import { Mail } from "lucide-react";
 
 export default function Home() {
   return (
+    <div>
     <div className="flex items-center justify-center min-h-screen w-full">
       <Card className="w-100">
         <CardHeader>
