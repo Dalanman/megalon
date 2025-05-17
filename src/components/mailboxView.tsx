@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { LayoutDashboard, Loader2, RefreshCcw, Mail, Clock } from "lucide-react"
 import mockEmails from "@/lib/emailMock.json"
 
+
 export function MailboxView() {
   const [emails] = useState(mockEmails)
   const [selectedEmails, setSelectedEmails] = useState<string[]>([])

@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -33,7 +34,7 @@ export const SlideCard: React.FC<SlideCardProps> = ({
 }) => {
   const [selectedOption, setSelectedOption] = useState<"A" | "B" | null>(null);
 
-  const handleOptionClick = (option: "A" | "B") => {
+  const handleOptionClick = (option: 'A' | 'B') => {
     setSelectedOption(option);
   };
 
