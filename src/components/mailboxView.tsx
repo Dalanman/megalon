@@ -148,19 +148,8 @@ export function MailboxView() {
           </div>
           <CardDescription>
             <div className="flex flex-wrap items-center gap-2">
-              <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs">
-                <Filter className="h-3.5 w-3.5" />
-                Filter
-              </Button>
-              <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs">
-                <ArrowDownAZ className="h-3.5 w-3.5" />
-                Sort
-              </Button>
               <Badge variant="outline" className="rounded-sm px-1 font-normal">
                 Unread: 12
-              </Badge>
-              <Badge variant="outline" className="rounded-sm px-1 font-normal">
-                Important: 5
               </Badge>
               <Badge variant="outline" className="rounded-sm px-1 font-normal">
                 Selected: {selectedEmails.length}
