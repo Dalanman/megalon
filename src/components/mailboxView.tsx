@@ -7,18 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useToast } from "@/hooks/use-toast"
-import { LayoutDashboard, Loader2, RefreshCcw, Tags, Mail, Clock } from "lucide-react"
+import { LayoutDashboard, Loader2, RefreshCcw, Mail, Clock } from "lucide-react"
 import mockEmails from "@/lib/emailMock.json"
 
 export function MailboxView() {
-  const [emails, setEmails] = useState(mockEmails)
+  const [emails] = useState(mockEmails)
   const [selectedEmails, setSelectedEmails] = useState<string[]>([])
-  const [isClassifying, setIsClassifying] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [hoveredRow, setHoveredRow] = useState<string | null>(null)
   const router = useRouter()
-  const { toast } = useToast()
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -65,8 +62,8 @@ export function MailboxView() {
 
       // Otherwise show full date
       return date.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })
-    } catch (e) {
-      return dateString // Fallback to original string if parsing fails
+    } catch (error) {
+      return error // Fallback to original string if parsing fails
     }
   }
 
