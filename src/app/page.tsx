@@ -34,5 +34,6 @@ export default function Home() {
         <ModeToggle></ModeToggle>
       </div>
     </div>
+    </div>
   );
 }

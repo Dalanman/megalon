@@ -20,8 +20,8 @@ export function GmailButton() {
     }
 ,
   },
-})      // In a real app, we would authenticate with Gmail
-        // For demo purposes, we'll just redirect to the dashboard
+})      
+        
     }
 
   return (
