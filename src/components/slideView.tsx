@@ -7,6 +7,8 @@ export function SlideSupportView() {
   const [emails, setEmails] = useState(emailMock);
   const [currentIndex, setCurrentIndex] = useState(0);
  const [displaySuggested, setSuggested] = useState(false)
+ const [displayResponse, setResponse] = useState(false)
+ const [generatedResponse, setgeneratedResponse] = useState([{"email_id":"string","response_options":[{"option":"string","response":"string"}]}])
   useEffect(() => {
     const fetchEmails = async () => {
       const response = await fetch("/api/chat/summarize", {
@@ -26,10 +28,28 @@ export function SlideSupportView() {
       console.log(data.response);
       setEmails(data.response); 
       }
-      );// <- use .response from backend
+      ).then(async response => {
+        const response2 = await fetch("/api/chat/reply",{method: "POST",
+              headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: emails }),
+        }).then(async response => {
+        setResponse(true)
+
+        if (!response.ok) {
+        console.error("Failed to fetch:", response.status);
+        return;
+      }
+      const data = await response.json();
+      console.log(data.response);
+      setgeneratedResponse(data.response); 
+      })
+      });// <- use .response from backend
     };
 
     fetchEmails();
+    
   }, []); // <-- runs only once on mount
 
 
@@ -44,6 +64,7 @@ export function SlideSupportView() {
   };
 
   const currentEmail = emails[currentIndex];
+  const currentResponse = generatedResponse[currentIndex];
 
   if (!currentEmail) {
     return <p className="text-center mt-20">🎉 You're all caught up!</p>;
@@ -61,7 +82,9 @@ export function SlideSupportView() {
           summary: currentEmail.summary,
           urgency: currentEmail.urgency,
           suggestedResponse: currentEmail.suggestedResponse || "",
-          generated: displaySuggested
+          generated: displaySuggested,
+          displayresponse: displayResponse,
+          generatedresponse: currentResponse
         }}
         onAccept={handleAccept}
         onReject={handleReject}

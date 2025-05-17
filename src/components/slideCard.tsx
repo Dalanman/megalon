@@ -17,6 +17,8 @@ interface SlideCardProps {
     urgency: string;
     suggestedResponse?: string;
     generated: boolean;
+    displayresponse: boolean,
+    generatedresponse?: string[],
   };
   onAccept: () => void;
   onReject: () => void;
@@ -62,11 +64,23 @@ export const SlideCard: React.FC<SlideCardProps> = ({
               {summary.suggestedResponse}
             </p>
           </div>
-        ) || !summary.generated && (        
+        )|| !summary.generated && !summary.displayresponse &&(        
         <div className="flex items-center gap-2">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-black border-t-transparent"></div>
-        <span><h1>Generating Summaries...</h1></span>
-        </div>)}
+        <span><h1>Generating Summaries and Responses...</h1></span>
+        </div>) || summary.generated && !summary.displayresponse &&(        <div className="flex items-center gap-2">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-black border-t-transparent"></div>
+        <span><h1>Generating Responses...</h1></span>
+        </div>) 
+        }
+        {
+        summary.displayresponse && (
+          <div>
+            <p className="text-sm text-foreground">
+              {summary.generatedresponse}
+            </p>
+          </div>
+        )}
       </CardContent>
 
       <CardFooter className="flex justify-end space-x-2">
@@ -76,7 +90,7 @@ export const SlideCard: React.FC<SlideCardProps> = ({
         {summary.generated && <Button variant="default" onClick={onAccept}>
           Accept
         </Button>}
-      </CardFooter>
+          </CardFooter>
     </Card>
   );
 };
