@@ -14,7 +14,7 @@ export function GmailButton() {
   const { data, error } = await supabase.auth.signInWithOAuth({
   provider: 'google',
   options: {
-    redirectTo: 'http:localhost:3000/auth/callback',
+    redirectTo: 'https://megalon.vercel.app/auth/callback',
     queryParams: {
       access_type: 'offline',
       prompt: 'consent',
